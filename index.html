@@ -1165,14 +1165,26 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
+      nav {
+        padding: 1rem 1.5rem;
+        grid-template-columns: auto 1fr auto;
+      }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-self: end;
+      }
+      /* Hide Sun/Moon text labels on mobile, keep just the toggle track */
+      .toggle-label-sun,
+      .toggle-label-moon { display: none; }
 
       section { padding: 5rem 1.5rem; }
 
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .about-portrait { max-width: 280px; }
+      .about-portrait { max-width: 320px; margin: 0 auto; }
 
       .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
       .form-row { grid-template-columns: 1fr; }
