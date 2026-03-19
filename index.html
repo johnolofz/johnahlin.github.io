@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>John Åhlin - Composer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f7f4ef;
+      --ink: #1a1714;
+      --ink-light: #4a4540;
+      --ink-muted: #9a948e;
+      --gold: #b89a6a;
+      --gold-light: #d4b98a;
+      --rule: #e2ddd8;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Jost', sans-serif;
+
+      /* Light mode nav bg */
+      --nav-bg: rgba(247, 244, 239, 0.92);
+      --nav-text: #4a4540;
+      --section-alt: #f0ece5;
+    }
+
+    /* ── DARK MODE VARIABLES ── */
+    body.dark {
+      --cream: #141210;
+      --ink: #ede8e0;
+      --ink-light: #b8b0a4;
+      --ink-muted: #6e6760;
+      --gold: #c9a96e;
+      --gold-light: #d4b98a;
+      --rule: #2e2a26;
+      --nav-bg: rgba(18, 16, 14, 0.92);
+      --nav-text: #9a948e;
+      --section-alt: #1a1714;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    /* smooth theme transition on everything except images/iframes */
+    body, body *:not(img):not(iframe):not(svg):not(path) {
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 1.4rem 4rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled { border-bottom-color: transparent; }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+      justify-self: start;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      align-items: center;
+      justify-self: center;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--nav-text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-right {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── DARK MODE TOGGLE - text style ── */
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0;
+      color: var(--ink-muted);
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .theme-toggle:hover { color: var(--gold); }
+
+    .toggle-label-sun,
+    .toggle-label-moon {
+      transition: opacity 0.3s, color 0.3s;
+    }
+    .toggle-label-sun  { opacity: 1; }
+    .toggle-label-moon { opacity: 0.35; }
+    body.dark .toggle-label-sun  { opacity: 0.35; }
+    body.dark .toggle-label-moon { opacity: 1; color: var(--gold); }
+
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      border-radius: 10px;
+      border: 1px solid var(--rule);
+      position: relative;
+      transition: border-color 0.3s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover .toggle-track { border-color: var(--gold); }
+    .toggle-knob {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    body.dark .toggle-knob { transform: translateX(16px); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--ink);
+      transition: all 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--cream);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+    .nav-mobile a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #2a2520 0%, #1a1714 100%);
+    }
+
+    .hero-photo {
+      position: absolute;
+      inset: -15% 0; /* extra height top+bottom for parallax travel */
+      z-index: 0;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      will-change: transform;
+    }
+    /* Placeholder shown when no image is set */
+    .hero-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #2a2520 0%, #1a1714 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: rgba(247,244,239,0.2);
+    }
+    .hero-photo-placeholder svg { width: 48px; height: 48px; opacity: 0.3; }
+    .hero-photo-placeholder span {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    /* Gradient overlay so text is always readable */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(26,23,20,0.25) 0%,
+        rgba(26,23,20,0.1) 35%,
+        rgba(26,23,20,0.45) 70%,
+        rgba(26,23,20,0.82) 100%
+      );
+    }
+
+    /* All hero text sits above the overlay */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 2rem;
+      animation: fadeUp 1s 0.2s ease both;
+    }
+
+    .hero-rule {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, var(--gold));
+      margin: 0 auto 2.2rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 1rem;
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 9vw, 8rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: #f0ece5;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: rgba(240,236,229,0.7);
+    }
+
+    .hero-tagline {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,236,229,0.5);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeIn 1s 1.2s ease both;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .hero-scroll span {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,244,239,0.4);
+      font-family: var(--sans);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(247,244,239,0.15), var(--gold));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 8rem 3rem; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    .section-header-line {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+    .section-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--ink-light); }
+    #contact .section-title em { color: rgba(240,236,229,0.5); }
+
+    /* ── ABOUT ── */
+    #about { background: var(--cream); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-portrait {
+      position: relative;
+    }
+    .portrait-frame {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--rule);
+      position: relative;
+      overflow: hidden;
+    }
+    .portrait-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, transparent 60%, rgba(184,154,106,0.15));
+    }
+    .portrait-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.75rem;
+      color: var(--ink-muted);
+    }
+    .portrait-placeholder svg { opacity: 0.3; }
+    .portrait-placeholder span { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+
+
+    .about-text p {
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      line-height: 1.85;
+      margin-bottom: 1.4rem;
+    }
+    .about-text p:first-of-type {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .about-credits {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      gap: 3rem;
+    }
+    .credit-item span {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .credit-item strong {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    /* ── WORKS ── */
+    #works { background: var(--section-alt); }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .work-card {
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      padding: 2rem;
+      position: relative;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .work-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .work-card-year {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    .work-card-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .work-card-subtitle {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      margin-bottom: 1.2rem;
+    }
+    .work-card-desc {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+    }
+    .work-card-tag {
+      display: inline-block;
+      margin-top: 1.4rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border: 1px solid var(--rule);
+      padding: 0.2rem 0.6rem;
+    }
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px;
+      height: 0;
+      background: var(--gold);
+      transition: height 0.3s;
+    }
+    .work-card:hover::before { height: 100%; }
+
+    /* ── AUDIO ── */
+    #audio { background: var(--cream); }
+
+    .audio-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--rule);
+    }
+
+    .audio-track {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid var(--rule);
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .audio-track:hover { background: rgba(184,154,106,0.04); }
+
+    .track-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--rule);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .track-btn:hover, .track-btn.playing {
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+    .track-btn svg { pointer-events: none; }
+    .track-btn:hover svg path, .track-btn.playing svg path { fill: white; }
+
+    .track-info {}
+    .track-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 0.2rem;
+    }
+    .track-meta {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+
+    .track-duration {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    .audio-note {
+      margin-top: 2.5rem;
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      text-align: center;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── AUDIO PLAYER ── */
+    .audio-player {
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .audio-track-list { border-bottom: 1px solid var(--rule); }
+    .audio-track-row {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.2rem;
+      border-bottom: 1px solid var(--rule);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .audio-track-row:last-child { border-bottom: none; }
+    .audio-track-row:hover { background: rgba(184,154,106,0.06); }
+    .audio-track-row.active { background: rgba(184,154,106,0.1); }
+    .audio-track-num {
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .audio-track-row.active .audio-track-num { color: var(--gold); }
+    .audio-track-info { min-width: 0; }
+    .audio-track-name {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .audio-track-row.active .audio-track-name { color: var(--gold); }
+    .audio-track-artist {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      margin-top: 0.1rem;
+    }
+    .audio-track-dur {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .audio-controls {
+      padding: 1rem 1.4rem;
+      background: var(--section-alt);
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .audio-now-playing { min-width: 0; }
+    .now-playing-title {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .now-playing-meta {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--ink-muted);
+    }
+    .audio-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .audio-time {
+      font-size: 0.65rem;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+      min-width: 2.5rem;
+    }
+    .audio-time:last-child { text-align: right; }
+    input[type=range].audio-progress,
+    input[type=range].audio-vol-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 2px;
+      background: var(--rule);
+      outline: none;
+      cursor: pointer;
+      flex: 1;
+      border-radius: 1px;
+    }
+    input[type=range].audio-progress::-webkit-slider-thumb,
+    input[type=range].audio-vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+    }
+    .audio-buttons {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .audio-btn {
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--ink-light);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .audio-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .audio-btn-play {
+      width: 44px; height: 44px;
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .audio-btn-play:hover { background: var(--gold); color: var(--cream); }
+    .audio-volume {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-left: auto;
+      color: var(--ink-muted);
+    }
+    .audio-vol-slider { width: 70px; flex: none; }
+
+    .licensing-links { margin-top: 2rem; }
+
+    /* ── MYMA LINK ── */
+    .myma-link {
+      margin-top: 2.5rem;
+    }
+    .myma-link-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      padding: 1.4rem 2rem;
+      border: 1px solid var(--rule);
+      background: var(--section-alt);
+    }
+    .myma-eyebrow {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .myma-link-text p {
+      font-size: 0.88rem;
+      color: var(--ink-light);
+    }
+    .myma-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      padding: 0.7rem 1.4rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .myma-btn:hover { background: var(--ink); color: var(--cream); }
+    @media (max-width: 600px) {
+      .myma-link-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── SHOWREEL ── */
+    #showreel { background: #f0ece5; }
+
+    .reel-filters {
+      display: flex;
+      gap: 0;
+      margin-bottom: 3rem;
+      border: 1px solid var(--rule);
+      align-self: flex-start;
+      width: fit-content;
+    }
+    .reel-filter-btn {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--rule);
+      padding: 0.6rem 1.4rem;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .reel-filter-btn:last-child { border-right: none; }
+    .reel-filter-btn:hover { color: var(--ink); background: rgba(184,154,106,0.06); }
+    .reel-filter-btn.active { background: #1a1714; color: #f0ece5; }
+
+    .reel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .reel-card {
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, opacity 0.35s;
+      position: relative;
+    }
+    .reel-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+    /* YouTube */
+    .reel-card[data-type="youtube"] .reel-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--ink);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .reel-card[data-type="youtube"] .reel-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .reel-card[data-type="youtube"] .reel-thumb:hover img { opacity: 0.7; }
+    .reel-play-btn {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26,23,20,0.3);
+    }
+    .reel-play-btn svg {
+      width: 52px; height: 52px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+      transition: transform 0.2s;
+    }
+    .reel-thumb:hover .reel-play-btn svg { transform: scale(1.1); }
+    .reel-iframe-wrap {
+      display: none;
+      aspect-ratio: 16/9;
+    }
+    .reel-iframe-wrap.active { display: block; }
+    .reel-iframe-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* Spotify */
+    .reel-card[data-type="spotify"] .reel-spotify-embed {
+      padding: 0;
+      line-height: 0;
+    }
+    .reel-card[data-type="spotify"] .reel-spotify-embed iframe {
+      width: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* itch.io */
+    .reel-card[data-type="itch"] .reel-itch-cover {
+      aspect-ratio: 16/9;
+      background: var(--ink);
+      overflow: hidden;
+      position: relative;
+    }
+    .reel-card[data-type="itch"] .reel-itch-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+    .reel-card[data-type="itch"]:hover .reel-itch-cover img { opacity: 0.75; }
+    .reel-itch-badge {
+      position: absolute;
+      top: 0.75rem; right: 0.75rem;
+      background: #fa5c5c;
+      color: white;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.5rem;
+      font-family: var(--sans);
+      font-weight: 500;
+    }
+
+    .reel-card-body {
+      padding: 1.2rem 1.4rem 1.4rem;
+    }
+    .reel-card-type {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .reel-card-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+      line-height: 1.25;
+    }
+    .reel-card-desc {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+    .reel-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 0.15rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .reel-link-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── CONTACT + FOOTER SHARED IMAGE WRAP ── */
+    .contact-footer-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-footer-wrap .contact-bg {
+      position: absolute;
+      inset: -20% 0 0;
+      z-index: 0;
+    }
+    .contact-footer-wrap .contact-bg img {
+      width: 100%;
+      height: 130%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+      will-change: transform;
+    }
+    .contact-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(26,23,20,0.92) 0%,
+        rgba(26,23,20,0.80) 60%,
+        rgba(26,23,20,0.70) 100%
+      );
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      position: relative;
+      overflow: visible;
+    }
+    #contact .section-inner {
+      position: relative;
+      z-index: 1;
+    }
+    #contact .section-eyebrow { color: var(--gold-light); }
+    #contact .section-header-line { background: rgba(255,255,255,0.1); }
+    #contact .section-title { color: #f0ece5; }
+    .contact-intro p { color: rgba(240,236,229,0.6); }
+    .contact-detail a, .contact-detail p { color: #f0ece5; }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+    }
+    .contact-detail span {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 0.2rem;
+    }
+    .contact-detail a:hover { color: var(--gold-light); }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .form-group label {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(247,244,239,0.4);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f0ece5;
+      padding: 0.85rem 1rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(240,236,229,0.25); }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--gold); }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+    .form-group select { cursor: pointer; background-color: rgba(20,18,16,0.6); }
+    .form-group select option { background: #1a1714; color: #f0ece5; }
+    .form-group label { color: rgba(240,236,229,0.4); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn-submit {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.85rem 2.5rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover {
+      background: var(--gold);
+      color: var(--ink);
+    }
+
+    .form-success {
+      display: none;
+      padding: 1.2rem;
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    /* ── SOCIAL ICONS (bottom of contact) ── */
+    .contact-socials {
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .contact-socials-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,244,239,0.3);
+      margin-bottom: 1.2rem;
+    }
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(247,244,239,0.5);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+      position: relative;
+    }
+    .social-icon:hover {
+      transform: translateY(-3px);
+      color: var(--cream);
+    }
+    .social-icon.instagram:hover { border-color: #e1306c; background: rgba(225,48,108,0.12); color: #e1306c; }
+    .social-icon.spotify:hover   { border-color: #1db954; background: rgba(29,185,84,0.12);  color: #1db954; }
+    .social-icon.youtube:hover   { border-color: #ff0000; background: rgba(255,0,0,0.12);    color: #ff0000; }
+    .social-icon.linkedin:hover  { border-color: #0a66c2; background: rgba(10,102,194,0.12); color: #0a66c2; }
+    .social-icon svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: transparent;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 1.4rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-socials {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center; /* centred in middle column */
+    }
+    .footer-socials .social-icon {
+      width: 34px;
+      height: 34px;
+      border-color: rgba(255,255,255,0.15);
+    }
+    .footer-socials .social-icon svg { width: 14px; height: 14px; }
+    .footer-copy {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(247,244,239,0.25);
+      text-transform: uppercase;
+      text-align: right;
+      justify-self: end;
+    }
+    @media (max-width: 768px) {
+      footer { grid-template-columns: 1fr; padding: 1.2rem 1.5rem; gap: 1rem; text-align: center; }
+      .footer-copy { justify-self: center; text-align: center; font-size: 0.58rem; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+
+      section { padding: 5rem 1.5rem; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-portrait { max-width: 280px; }
+
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+
+      footer { padding: 1.5rem; text-align: right; }
+
+      .about-credits { gap: 2rem; }
+    }
+
+    @media (max-width: 480px) {
+      .audio-track { grid-template-columns: 40px 1fr auto; gap: 1rem; }
+      .track-btn { width: 40px; height: 40px; }
+    }
+  </style>
+  <script>
+    function filterReel(filter, clickedBtn) {
+      // Update active button
+      document.querySelectorAll('.reel-filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+      clickedBtn.classList.add('active');
+      // Show/hide cards
+      document.querySelectorAll('#reelGrid .reel-card').forEach(function(card) {
+        card.style.display = (filter === 'all' || card.getAttribute('data-type') === filter) ? '' : 'none';
+      });
+    }
+
+    function revealEmail(el) {
+      const encoded = 'wbua.nuyva@tznvy.pbz';
+      const decoded = encoded.replace(/[a-zA-Z]/g, function(c) {
+        return String.fromCharCode(
+          (c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26
+        );
+      });
+      el.href = 'mailto:' + decoded;
+      el.textContent = decoded;
+      return false;
+    }
+  </script>
+</head>
+<body class="dark">
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">John Åhlin</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#audio">Listen</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggleNav" aria-label="Toggle dark mode"
+        onclick="document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');">
+        <span class="toggle-label-sun">Sun</span>
+        <span class="toggle-track"><span class="toggle-knob"></span></span>
+        <span class="toggle-label-moon">Moon</span>
+      </button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#works" class="mobile-link">Works</a>
+    <a href="#audio" class="mobile-link">Listen</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+
+    <!-- ╔═══════════════════════════════════════════════╗
+         ║  HERO PHOTO                                   ║
+         ║  Replace the placeholder div with:           ║
+         ║  <img src="your-photo.jpg" alt="Studio" />   ║
+         ║  Recommended: wide landscape, 1920×1080+     ║
+         ║  object-position is set to "center top"      ║
+         ╚═══════════════════════════════════════════════╝ -->
+    <div class="hero-photo">
+      <img src="images/low_banner.jpg" alt="John Åhlin - Composer" />
+    </div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Composer &amp; Sound Designer</p>
+      <h1 class="hero-name">John Åhlin</h1>
+      <p class="hero-tagline">Games · Trailers · Films · Interactive Media</p>
+    </div>
+
+    <button class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" aria-label="Scroll to content">
+      <div class="scroll-line"></div>
+      <span>Down</span>
+    </button>
+
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-header-line"></div>
+        <span class="section-eyebrow">About</span>
+        <div class="section-header-line"></div>
+      </div>
+      <div class="about-grid">
+        <div class="about-portrait reveal">
+          <div class="portrait-frame">
+            <img src="images/profile.JPG" alt="John Åhlin" style="width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block;" />
+          </div>
+        </div>
+        <div class="about-text reveal">
+          <h2 class="section-title">Music built from <em>the ground up</em></h2>
+          <p>Composer and sound designer based in Stockholm, Sweden. Since 2017 I've specialised in games and interactive music - scores that respond, breathe and adapt alongside the player.</p>
+          <p>I've worked extensively in mobile and casino games. My previous work includes award winning short films, interactive works, commercials and 120 tracks for Epidemic Sound, featured across all major Swedish TV channels.</p>
+          <p>Trailer music is a current passion of mine. I love building tension, impact and release within a tight format. My trailer catalogue is available through MYMA Music. As a guitarist with a deep love for stringed instruments, I lean into acoustic and organic textures - layered against electronic production and cinematic sound design.</p>
+          <p>I also record as John Dunder, an atmospheric synth project that can be licensed through West Channel Music. When I'm not in the studio, I'm somewhere in the Swedish wilderness with a field recorder.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKS -->
+  <section id="works">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-header-line"></div>
+        <span class="section-eyebrow">Works</span>
+        <div class="section-header-line"></div>
+      </div>
+      <h2 class="section-title reveal">Watch &amp; <em>explore</em></h2>
+
+      <div class="reel-filters" id="reelFilters">
+        <button class="reel-filter-btn active" data-filter="all"
+          onclick="filterReel('all', this)">All</button>
+        <button class="reel-filter-btn" data-filter="youtube"
+          onclick="filterReel('youtube', this)">Video</button>
+        <button class="reel-filter-btn" data-filter="spotify"
+          onclick="filterReel('spotify', this)">Spotify</button>
+        <button class="reel-filter-btn" data-filter="itch"
+          onclick="filterReel('itch', this)">Games</button>
+      </div>
+
+      <div class="reel-grid" id="reelGrid">
+
+        <!-- YOUTUBE: Runner Two Music Video -->
+        <div class="reel-card" data-type="youtube">
+          <div class="reel-thumb" data-videoid="QtcnW2iuIuA">
+            <img src="https://img.youtube.com/vi/QtcnW2iuIuA/mqdefault.jpg" alt="Runner Two Music Video" loading="lazy" />
+            <div class="reel-play-btn">
+              <svg viewBox="0 0 52 52" fill="none">
+                <circle cx="26" cy="26" r="25" fill="rgba(247,244,239,0.92)"/>
+                <path d="M21 17l16 9-16 9V17z" fill="#1a1714"/>
+              </svg>
+            </div>
+          </div>
+          <div class="reel-iframe-wrap" id="yt-QtcnW2iuIuA"></div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Music Video · John Dunder</p>
+            <h3 class="reel-card-title">Runner Two</h3>
+            <p class="reel-card-desc">Music video for the first single of the album Runner Two, made in Unreal 5. A story about a second-generation delivery robot who finds itself alone on an abandoned Nordic island.</p>
+          </div>
+        </div>
+
+        <!-- VIMEO: C (299,792 km/s) -->
+        <div class="reel-card" data-type="youtube">
+          <div class="reel-thumb" data-vimeoid="58429056" style="cursor:pointer;">
+            <img src="https://vumbnail.com/58429056.jpg" alt="C (299,792 km/s)" loading="lazy"
+              onerror="this.src='https://placehold.co/560x315/1a1714/b89a6a?text=C+(299%2C792+km%2Fs)'" />
+            <div class="reel-play-btn">
+              <svg viewBox="0 0 52 52" fill="none">
+                <circle cx="26" cy="26" r="25" fill="rgba(247,244,239,0.92)"/>
+                <path d="M21 17l16 9-16 9V17z" fill="#1a1714"/>
+              </svg>
+            </div>
+          </div>
+          <div class="reel-iframe-wrap" id="vm-58429056"></div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Sci-Fi Short Film · Derek van Gorder</p>
+            <h3 class="reel-card-title">C (299,792 km/s) - Director's Cut</h3>
+            <p class="reel-card-desc">Premiered at Sci-Fi Brooklyn Festival 2023. Best Score at Sci-Fi Gainesville Short Film Festival 2022.</p>
+          </div>
+        </div>
+
+        <!-- SPOTIFY: John Åhlin -->
+        <div class="reel-card" data-type="spotify">
+          <div class="reel-spotify-embed">
+            <iframe
+              src="https://open.spotify.com/embed/artist/51WI9Vn085tkqjGQE7VWP8?utm_source=generator&theme=0"
+              width="100%" height="380"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy">
+            </iframe>
+          </div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Spotify Artist</p>
+            <h3 class="reel-card-title">John Åhlin</h3>
+            <p class="reel-card-desc">Composer profile - orchestral, cinematic and game scores.</p>
+          </div>
+        </div>
+
+        <!-- SPOTIFY: John Dunder -->
+        <div class="reel-card" data-type="spotify">
+          <div class="reel-spotify-embed">
+            <iframe
+              src="https://open.spotify.com/embed/artist/0wq4tKBt3QVyajrRbt9rAv?utm_source=generator&theme=0"
+              width="100%" height="380"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy">
+            </iframe>
+          </div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Spotify Artist</p>
+            <h3 class="reel-card-title">John Dunder</h3>
+            <p class="reel-card-desc">Electronic and cinematic project - featuring the single Runner Two.</p>
+          </div>
+        </div>
+
+        <!-- ITCH: Bright Oak -->
+        <div class="reel-card" data-type="itch">
+          <div class="reel-itch-cover">
+            <img src="images/brightoak_thumb.png" alt="Bright Oak" loading="lazy"
+              onerror="this.src='https://placehold.co/560x315/1a1714/b89a6a?text=Bright+Oak'" />
+            <span class="reel-itch-badge">itch.io</span>
+          </div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Visual Novel · Butterfly Rocket</p>
+            <h3 class="reel-card-title">Bright Oak</h3>
+            <p class="reel-card-desc">Composer for this visual novel. Music inspired by Ennio Morricone.</p>
+            <a href="https://butterflyrocket.itch.io/bright-oak-demo" class="reel-link-btn" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+              View on itch.io
+            </a>
+          </div>
+        </div>
+
+        <!-- ITCH: Burdock -->
+        <div class="reel-card" data-type="itch">
+          <div class="reel-itch-cover">
+            <img src="images/burdock_thumb.png" alt="Burdock" loading="lazy"
+              onerror="this.src='https://placehold.co/560x315/1a1714/b89a6a?text=Burdock'" />
+            <span class="reel-itch-badge">itch.io</span>
+          </div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Visual Novel · Butterfly Rocket</p>
+            <h3 class="reel-card-title">Burdock</h3>
+            <p class="reel-card-desc">Organic, acoustic, introspective, cinematic music with a touch of unsettling horror.</p>
+            <a href="https://butterflyrocket.itch.io/burdock" class="reel-link-btn" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+              View on itch.io
+            </a>
+          </div>
+        </div>
+
+        <!-- ITCH: Other Spheres -->
+        <div class="reel-card" data-type="itch">
+          <div class="reel-itch-cover">
+            <img src="images/otherspheres_thumb.jpg" alt="Other Spheres" loading="lazy"
+              onerror="this.src='https://placehold.co/560x315/1a1714/b89a6a?text=Other+Spheres'" />
+            <span class="reel-itch-badge">itch.io</span>
+          </div>
+          <div class="reel-card-body">
+            <p class="reel-card-type">Visual Novel · Butterfly Rocket</p>
+            <h3 class="reel-card-title">Other Spheres</h3>
+            <p class="reel-card-desc">Music inspired by French Impressionism and Isao Tomita.</p>
+            <a href="https://butterflyrocket.itch.io/other-spheres" class="reel-link-btn" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+              View on itch.io
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIO -->
+  <section id="audio">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-header-line"></div>
+        <span class="section-eyebrow">Listen</span>
+        <div class="section-header-line"></div>
+      </div>
+      <h2 class="section-title reveal">Selected <em>tracks</em></h2>
+
+      <!-- AUDIO PLAYER -->
+      <div class="audio-player">
+        <div class="audio-track-list" id="audioList"></div>
+        <div class="audio-controls">
+          <div class="audio-now-playing" id="nowPlaying">
+            <span class="now-playing-title" id="nowPlayingTitle">-</span>
+            <span class="now-playing-meta" id="nowPlayingMeta">Select a track to play</span>
+          </div>
+          <div class="audio-progress-wrap">
+            <span class="audio-time" id="currentTime">0:00</span>
+            <input type="range" class="audio-progress" id="progressBar" value="0" min="0" max="100" step="0.1">
+            <span class="audio-time" id="totalTime">0:00</span>
+          </div>
+          <div class="audio-buttons">
+            <button class="audio-btn" id="prevBtn" aria-label="Previous">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M2 2h1.5v10H2V2zm9.5 1.5L5 7l6.5 3.5V3.5z"/></svg>
+            </button>
+            <button class="audio-btn audio-btn-play" id="playBtn" aria-label="Play">
+              <svg id="playIcon" width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M3 2l9 5-9 5V2z"/></svg>
+              <svg id="pauseIcon" width="16" height="16" viewBox="0 0 14 14" fill="currentColor" style="display:none"><path d="M3 2h2.5v10H3V2zm5.5 0H11v10H8.5V2z"/></svg>
+            </button>
+            <button class="audio-btn" id="nextBtn" aria-label="Next">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M10.5 2H12v10h-1.5V2zm-8 1.5L9 7 2.5 10.5V3.5z"/></svg>
+            </button>
+            <div class="audio-volume">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M2 5h2.5L8 2v10L4.5 9H2V5zm8-.5a3.5 3.5 0 010 5"/></svg>
+              <input type="range" class="audio-vol-slider" id="volSlider" value="80" min="0" max="100">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LICENSING LINKS -->
+      <div class="licensing-links reveal">
+        <div class="myma-link-inner">
+          <div class="myma-link-text">
+            <span class="myma-eyebrow">Trailer &amp; Sync Licensing · John Åhlin</span>
+            <p>Full trailer catalogue available on MYMA Music.</p>
+          </div>
+          <a href="https://www.myma-music.com/search?keyword_fields=%22John_Aahlin_Composer%22&view=tracks&page=1"
+             class="myma-btn" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+            Browse on MYMA
+          </a>
+        </div>
+        <div class="myma-link-inner" style="margin-top:0.8rem;">
+          <div class="myma-link-text">
+            <span class="myma-eyebrow">Music Licensing · John Dunder</span>
+            <p>Electronic and cinematic tracks available via West Channel Music.</p>
+          </div>
+          <a href="https://westchannel.disco.ac/cat/5418/artists/9369204"
+             class="myma-btn" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+            Browse on Disco
+          </a>
+        </div>
+        <div class="myma-link-inner" style="margin-top:0.8rem;">
+          <div class="myma-link-text">
+            <span class="myma-eyebrow">Music Licensing · John Åhlin</span>
+            <p>Full catalogue available on MYMA Music.</p>
+          </div>
+          <a href="https://www.myma-music.com/search?keyword_fields=%22John_Aahlin_Composer%22&view=tracks&page=1"
+             class="myma-btn" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+            Browse on MYMA
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT + FOOTER share the same background image -->
+  <div class="contact-footer-wrap">
+
+    <!-- background image layer shared by both -->
+    <div class="contact-bg">
+      <img src="images/top_banner.jpg" alt="" aria-hidden="true" id="contactBgImg" />
+      <div class="contact-bg-overlay"></div>
+    </div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <div class="section-header-line"></div>
+        <span class="section-eyebrow">Contact</span>
+        <div class="section-header-line"></div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-intro reveal">
+          <h2 class="section-title">Let's make something <em>together</em></h2>
+          <p>Whether you're a game developer seeking an adaptive score, a trailer house looking for high-impact cues, a music supervisor, or a director with a story to tell - I'd love to hear about your project.</p>
+          <br>
+          <div class="contact-details">
+            <div class="contact-detail">
+              <span>Email</span>
+              <a href="#" id="emailLink" onclick="return revealEmail(this)">Click to reveal</a>
+            </div>
+            <div class="contact-detail">
+              <span>Based in</span>
+              <p>Stockholm, Sweden</p>
+            </div>
+            <div class="contact-detail">
+              <span>Music &amp; Sync Licensing · John Dunder</span>
+              <a href="https://westchannel.disco.ac/cat/5418/artists/9369204" target="_blank" rel="noopener">West Channel Music</a>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject">
+                <option value="">- Select a topic -</option>
+                <option value="game">Game Score Commission</option>
+                <option value="trailer">Trailer Music</option>
+                <option value="film">Film / TV Score</option>
+                <option value="licensing">Music Licensing</option>
+                <option value="supervision">Music Supervision</option>
+                <option value="collab">Collaboration</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell me about your project…" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Send Message</button>
+            <div class="form-success" id="formSuccess">Thank you - I'll be in touch soon.</div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <span></span>
+    <!-- Social icons -->
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/johnahlinaudio/" class="social-icon instagram" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://open.spotify.com/artist/51WI9Vn085tkqjGQE7VWP8" class="social-icon spotify" target="_blank" rel="noopener" aria-label="Spotify">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@johnahlin" class="social-icon youtube" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://se.linkedin.com/in/john-%C3%A5hlin" class="social-icon linkedin" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </div>
+
+    <!-- Copyright -->
+    <span class="footer-copy">&copy; 2026 · John Åhlin · All rights reserved</span>
+  </footer>
+
+  </div><!-- end contact-footer-wrap -->
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ── NAV SCROLL ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ── HERO PARALLAX ──
+    const heroPhoto = document.querySelector('.hero-photo img');
+    if (heroPhoto) {
+      const onScroll = () => {
+        const scrolled = window.scrollY;
+        const heroH = document.getElementById('hero').offsetHeight;
+        if (scrolled <= heroH) {
+          // Moves upward at 40% of scroll speed - smooth, not too dramatic
+          heroPhoto.style.transform = `translateY(${scrolled * 0.4}px)`;
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    // ── CONTACT BG PARALLAX ──
+    const contactBgImg = document.getElementById('contactBgImg');
+    if (contactBgImg) {
+      window.addEventListener('scroll', () => {
+        const contact = document.getElementById('contact');
+        const rect = contact.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (rect.bottom > 0 && rect.top < vh) {
+          const progress = 1 - (rect.bottom / (vh + contact.offsetHeight));
+          contactBgImg.style.transform = `translateY(${progress * -80}px)`;
+        }
+      }, { passive: true });
+    }
+
+    // ── HAMBURGER ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // ── SCROLL REVEAL ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── AUDIO PLAYER ──
+    // ╔═══════════════════════════════════════════════════════════╗
+    // ║  ADD YOUR TRACKS HERE                                     ║
+    // ║  Best formats for web (quality vs size):                  ║
+    // ║  • .opus  - best compression, great quality (recommended) ║
+    // ║  • .ogg   - excellent quality, widely supported           ║
+    // ║  • .mp3   - universal fallback                            ║
+    // ║  Tip: encode opus at 128–192kbps for transparent quality  ║
+    // ║  Place files next to index.html in your repo              ║
+    // ╚═══════════════════════════════════════════════════════════╝
+    const tracks = [
+      { title: "Track Title 1", artist: "John Åhlin", src: "audio/track1.opus" },
+      { title: "Track Title 2", artist: "John Åhlin", src: "audio/track2.opus" },
+      { title: "Track Title 3", artist: "John Dunder", src: "audio/track3.opus" },
+    ];
+
+    let audio = new Audio();
+    let currentIdx = -1;
+    let isPlaying = false;
+
+    const trackList = document.getElementById('audioList');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalTimeEl = document.getElementById('totalTime');
+    const volSlider = document.getElementById('volSlider');
+    const nowPlayingTitle = document.getElementById('nowPlayingTitle');
+    const nowPlayingMeta = document.getElementById('nowPlayingMeta');
+
+    function formatTime(s) {
+      if (isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+    }
+
+    function renderTracks() {
+      trackList.innerHTML = '';
+      tracks.forEach((t, i) => {
+        const row = document.createElement('div');
+        row.className = 'audio-track-row';
+        row.innerHTML = `
+          <span class="audio-track-num">${i + 1}</span>
+          <div class="audio-track-info">
+            <div class="audio-track-name">${t.title}</div>
+            <div class="audio-track-artist">${t.artist}</div>
+          </div>
+          <span class="audio-track-dur">-</span>`;
+        row.addEventListener('click', () => loadTrack(i, true));
+        trackList.appendChild(row);
+      });
+    }
+
+    function loadTrack(idx, autoplay) {
+      currentIdx = idx;
+      const t = tracks[idx];
+      audio.src = t.src;
+      audio.volume = volSlider.value / 100;
+      nowPlayingTitle.textContent = t.title;
+      nowPlayingMeta.textContent = t.artist;
+      document.querySelectorAll('.audio-track-row').forEach((r, i) => r.classList.toggle('active', i === idx));
+      if (autoplay) { audio.play(); isPlaying = true; setPlayState(true); }
+    }
+
+    function setPlayState(playing) {
+      isPlaying = playing;
+      playIcon.style.display = playing ? 'none' : '';
+      pauseIcon.style.display = playing ? '' : 'none';
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (currentIdx === -1) { loadTrack(0, true); return; }
+      if (isPlaying) { audio.pause(); setPlayState(false); }
+      else { audio.play(); setPlayState(true); }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+      loadTrack((currentIdx - 1 + tracks.length) % tracks.length, isPlaying);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      loadTrack((currentIdx + 1) % tracks.length, isPlaying);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      progressBar.value = pct;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      totalTimeEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      const rows = document.querySelectorAll('.audio-track-row');
+      if (rows[currentIdx]) rows[currentIdx].querySelector('.audio-track-dur').textContent = formatTime(audio.duration);
+      totalTimeEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('ended', () => {
+      loadTrack((currentIdx + 1) % tracks.length, true);
+    });
+
+    progressBar.addEventListener('input', () => {
+      if (audio.duration) audio.currentTime = (progressBar.value / 100) * audio.duration;
+    });
+
+    volSlider.addEventListener('input', () => { audio.volume = volSlider.value / 100; });
+
+    renderTracks();
+
+    // ── YOUTUBE & VIMEO CLICK-TO-EMBED ──
+    document.querySelectorAll('.reel-thumb').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        // YouTube
+        const ytId = thumb.dataset.videoid;
+        if (ytId && !ytId.startsWith('YOUR_')) {
+          const wrap = document.getElementById('yt-' + ytId);
+          if (wrap) {
+            wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            wrap.classList.add('active');
+            thumb.style.display = 'none';
+          }
+        }
+        // Vimeo
+        const vmId = thumb.dataset.vimeoid;
+        if (vmId) {
+          const wrap = document.getElementById('vm-' + vmId);
+          if (wrap) {
+            wrap.innerHTML = `<iframe src="https://player.vimeo.com/video/${vmId}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+            wrap.classList.add('active');
+            thumb.style.display = 'none';
+          }
+        }
+      });
+    });
+
+    // ── CONTACT FORM ──
+    function handleSubmit(e) {
+      e.preventDefault();
+      // Replace with your preferred form handler (Formspree, Netlify Forms, etc.)
+      // For Formspree: add action="https://formspree.io/f/YOUR_ID" to the <form> and remove this JS handler
+      document.getElementById('contactForm').style.opacity = '0.4';
+      document.getElementById('contactForm').style.pointerEvents = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }
+
+    // ── DARK MODE - restore saved preference (default: dark) ──
+    if (localStorage.getItem('theme') === 'light') document.body.classList.remove('dark');
+  </script>
+</body>
+</html>
