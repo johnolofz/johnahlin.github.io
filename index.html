@@ -10,14 +10,14 @@
   <meta name="keywords" content="John Åhlin, composer, sound designer, Stockholm, game music, trailer music, interactive audio, film score, web audio">
   <meta name="author" content="John Åhlin">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://www.johnahlinaudio.com">
+  <link rel="canonical" href="https://www.johnahlinaudio.com/">
   <meta name="google-site-verification" content="b3K-ghnu25hUH-aCfq89INo7vzCafcveGGIweMUPusA">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.johnahlinaudio.com">
+  <meta property="og:url" content="https://www.johnahlinaudio.com/">
   <meta property="og:title" content="John Åhlin - Composer & Sound Designer">
   <meta property="og:description" content="Composer and sound designer based in Stockholm. Specialising in games, interactive audio and trailer music.">
   <meta property="og:image" content="https://www.johnahlinaudio.com/images/profile.JPG">
@@ -784,6 +784,14 @@
     }
     .audio-vol-slider { width: 70px; flex: none; }
 
+    /* Hide volume slider on mobile — unreliable on touch devices */
+    @media (max-width: 768px) {
+      .audio-volume { display: none; }
+    }
+    @media (pointer: coarse) {
+      .audio-volume { display: none; }
+    }
+
     .licensing-links { margin-top: 2rem; }
 
     /* ── MYMA LINK ── */
@@ -1293,6 +1301,11 @@
 </head>
 <body class="dark">
 
+  <noscript>
+    <style>.reveal { opacity: 1; transform: none; } .nav-mobile { display: none; } .audio-player { display: none; }</style>
+    <p style="text-align:center;padding:1rem;background:#b89a6a;color:#1a1714;font-size:0.85rem;">This site works best with JavaScript enabled. The audio player and some interactive features require it.</p>
+  </noscript>
+
   <!-- NAV -->
   <nav id="navbar">
     <a href="#hero" class="nav-logo">John Åhlin</a>
@@ -1330,6 +1343,7 @@
   </div>
 
   <!-- HERO -->
+  <main>
   <section id="hero">
 
     <!-- ╔═══════════════════════════════════════════════╗
@@ -1693,6 +1707,7 @@
 
     </div>
   </section>
+  </main>
 
   <footer>
     <span></span>
